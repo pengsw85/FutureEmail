@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>Future Email</title>
+
+        <!-- Google Font -->
+        <link
+            href="https://fonts.googleapis.com/css?family=Mansalva|Roboto&display=swap"
+            rel="stylesheet"
+        />
+
+        <!-- Custom CSS -->
+        <link rel="stylesheet" href="css/style.css" />
+    </head>
+    <body>
+        <main>
+            <div class="textContainer">
+                <h1>
+                    Write a letter, message, words of encouragement to your
+                    future self!!
+                </h1>
+            </div>
+            <div class="formContainer">
+                <form action="/" method="POST">
+                    <div class="nameContainer">
+                        <label for="name">Name</label> <br />
+                        <input type="text" name="name" id="name" /> <br />
+                    </div>
+                    <div class="emailContainer">
+                        <label for="email">Email</label> <br />
+                        <input type="text" name="email" id="email" /> <br />
+                    </div>
+                    <div class="messageContainer">
+                        <label for="message">Message</label>
+                        <textarea name="message"></textarea>
+                    </div>
+                    <div class="buttonContainer">
+                        <div class="button">
+                            Send it !!
+                        </div>
+                    </div>
+
+                    <div class="timerContainer">
+                        <div class="timer">
+                            <div>
+                                <label for="time"
+                                    >When do you want to read it ?</label
+                                >
+                                <input type="text" name="time" id="timeInput" />
+                                <span> Days</span>
+                                <button type="submit">Send!</button>
+                            </div>
+                        </div>
+                        <div class="close">
+                            &times;
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </body>
+    <script src="index.js"></script>
+</html>
