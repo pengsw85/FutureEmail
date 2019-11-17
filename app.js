@@ -43,6 +43,54 @@ const futureDateToMilli = day => {
     return parseInt(d.getTime() + parseInt(day) * (8.64 * 10 ** 7));
 };
 
+const checkDateForEmail = () => {
+    Email.find((err, emails) => {
+        if (err) {
+            console.log(err);
+        } else {
+            d = new Date();
+            currentTime = d.getTime();
+            for (let email of emails) {
+                console.log(email);
+                if (currentTime >= email.date) {
+                    const transport = nodemailer.createTransport({
+                        service: "gmail",
+                        auth: {
+                            user: process.env.FUTURE_MAIL_EMAIL,
+                            pass: process.env.FUTURE_MAIL_PASS
+                        }
+                    });
+                    const textMessage = `HEY ${email.name}!\n${email.message}`;
+                    const message = {
+                        from: process.env.FUTURE_MAIL_EMAIL,
+                        to: email.email,
+                        subject: "An email from your past self!",
+                        text: textMessage
+                    };
+                    transport.sendMail(message, function(err, info) {
+                        if (err) {
+                            console.log(err);
+                        } else {
+                            console.log(info);
+                        }
+                    });
+
+                    Email.deleteOne({ _id: email._id }, err => {
+                        if (err) {
+                            console.log(err);
+                        } else {
+                            console.log("deleted");
+                        }
+                    });
+                }
+            }
+        }
+    });
+};
+
+const interval = 8.64 * 10 ** 7;
+setInterval(checkDateForEmail, interval);
+
 app.route("/")
 
     .get((req, res) => {
@@ -50,29 +98,6 @@ app.route("/")
     })
 
     .post((req, res) => {
-        const transport = nodemailer.createTransport({
-            host: "smtp.mailtrap.io",
-            port: 2525,
-            auth: {
-                user: process.env.MAILER_TRAP_USER,
-                pass: process.env.MAILER_TRAP_PASS
-            }
-        });
-        const textMessage = `HEY ${req.body.name}!\n${req.body.message}`;
-        const message = {
-            from: process.env.FUTURE_MAIL_EMAIL,
-            to: req.body.email,
-            subject: "An email from your past self!",
-            text: textMessage
-        };
-        transport.sendMail(message, function(err, info) {
-            if (err) {
-                console.log(err);
-            } else {
-                console.log(info);
-            }
-        });
-
         const newEmail = new Email({
             name: req.body.name,
             email: req.body.email,
@@ -88,7 +113,7 @@ app.route("/")
             }
         });
 
-        res.send(req.body);
+        res.redirect("/");
         console.log(req.body);
     });
 
